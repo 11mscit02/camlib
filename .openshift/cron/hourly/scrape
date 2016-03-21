@@ -1,0 +1,23 @@
+#!/bin/bash
+
+# Use GMT
+export TZ='Europe/London'
+echo "UK Time: $(date)"
+
+# Only run at 4am
+hour=$(date '+%H')
+if [ $hour != 4 ]; then
+    exit
+fi
+
+touch $OPENSHIFT_DATA_DIR/last_scraped
+echo "Starting scraper..."
+
+cd $OPENSHIFT_REPO_DIR/tasks
+./scrape.py --output=$OPENSHIFT_DATA_DIR/camlib.json
+EXITSTATUS=$?
+
+echo "Scraper finished, restarting Python webserver..."
+gear restart --cart python-2.7
+
+exit $EXITSTATUS

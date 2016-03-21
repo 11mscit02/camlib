@@ -1,0 +1,22 @@
+{% for row in data | batch(4) %}
+  <div class="row">
+    {% for book in row %}
+      <div class="col-md-3 text-center">
+        <a href="/redirect/camlib?isbn={{book['isbn']}}"
+           title="View '{{book['title']}}' at Cambridgeshire Library"
+           onclick="camlib_search({{book['isbn']}}); return false;">
+          <img src="{{book['cover_url']}}" width=256 height=384>
+        </a>
+        <a class="stars" href="http://www.goodreads.com/search?query={{book['isbn']}}"
+           title="View '{{book['title']}} at GoodReads'">
+          <span class="stars stars_to_render">{{book["rating"]}}</span>
+        </a>
+      </div>
+    {% endfor %}
+  </div>
+{% endfor %}
+{% if next_page %}
+  <a href="/fragment/books?page={{next_page}}">Next Page</a>
+{% else %}
+  <a></a>
+{% endif %}

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="Scraped from Cambridgeshire Library eBooks with ratings from GoodReads.">
+    <meta name="author" content="Pete Burgers">
+    <!-- <link rel="icon" href="../../favicon.ico"> -->
+
+    <title>Cambridgeshire Library eBooks</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="/static/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <!-- <link href="../../assets/css/ie10-viewport-bug-workaround.css" rel="stylesheet"> -->
+
+    <!-- Custom styles for this template -->
+    <link href="/static/css/root.css" rel="stylesheet">
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+
+  <body>
+    <!-- Main jumbotron for a primary marketing message or call to action -->
+    <div class="jumbotron">
+      <div class="container">
+        <h1>Cambridgeshire Library eBooks</h1>
+        <p>
+          Scraped from <a href="http://cambridgeshire.libraryebooks.co.uk/site/EB/ebooks/" target="_blank">Cambridgeshire Library eBooks</a>
+          with ratings from <a href="http://www.goodreads.com/" target="_blank">GoodReads</a>.
+        </p>
+        <!-- <p><a class="btn btn-primary btn-lg" href="#" role="button">Learn more &raquo;</a></p> -->
+      </div>
+    </div>
+
+    <div class="container infinite-scroll">
+      {% include "books_fragment.html" %}
+
+      <hr>
+
+      <footer>
+        <p></p>
+      </footer>
+    </div> <!-- /container -->
+
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+    <script>window.jQuery || document.write('<script src="/static/jquery/jquery.min.js"><\/script>')</script>
+    <script src="/static/bootstrap/js/bootstrap.min.js"></script>
+    <script src="/static/jquery/jquery.jscroll.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <!-- <script src="../../assets/js/ie10-viewport-bug-workaround.js"></script> -->
+
+	  <script type="text/javascript">
+      $(function() {
+        render_all_stars();
+        $('div.infinite-scroll').jscroll({
+          padding: 400,
+          callback: render_all_stars
+        });
+      });
+
+      function render_all_stars() {
+        $('span.stars_to_render').render_stars();
+      }
+
+      $.fn.render_stars = function() {
+          return $(this).each(function() {
+              // Get the value
+              var val = parseFloat($(this).html());
+              // Make sure that the value is in 0 - 5 range, multiply to get width
+              var size = Math.max(0, (Math.min(5, val))) * 16;
+              // Create stars holder
+              var $span = $("<span />").width(size);
+              // Replace the numerical value with stars
+              $(this).html($span);
+              // Remove the class, so it doesn't get rendered again
+              $(this).removeClass("stars_to_render");
+          });
+      }
+
+      function camlib_search(isbn) {
+        $('input[name="keyword"]').val(isbn);
+        $("#form_submit").submit();
+      }
+    </script>
+
+    <form method="post" action="http://cambridgeshire.libraryebooks.co.uk/site/EB/ebooks/search_generate.asp" id="form_submit">
+      <input type="hidden" name="quicksearchtype" value="keyisbn">
+      <input type="hidden" name="keyword" value="">
+      <input type="hidden" name="st" value="simple">
+    </form>
+  </body>
+</html>
