@@ -14,7 +14,7 @@ touch $OPENSHIFT_DATA_DIR/last_scraped
 echo "Starting scraper..."
 
 cd $OPENSHIFT_REPO_DIR/tasks
-./scrape.py --output=$OPENSHIFT_DATA_DIR/camlib.json
+./scrape.py --output=$OPENSHIFT_DATA_DIR/$CAMLIB_SCRAPER_REL_DIR
 EXITSTATUS=$?
 
 echo "Scraper finished, restarting Python webserver..."
