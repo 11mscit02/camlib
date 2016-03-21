@@ -7,8 +7,8 @@ DEFAULT_JSON_PATH = "_json"
 PAGE_LENGTH = 20
 
 class CamlibFlask(Flask):
-    def __init__(self, name):
-        super(CamlibFlask, self).__init__(name)
+    def __init__(self, *args, **kwds):
+        super(CamlibFlask, self).__init__(*args, **kwds)
         self.books = []
 
     def load_books(self, json_path):
