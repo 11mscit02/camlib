@@ -47,15 +47,20 @@
           <!-- <ul class="nav navbar-nav">
           </ul> -->
           <ul class="nav navbar-nav navbar-right">
-            <li class="dropdown">
+            <li id="genre-dropdown" class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                 Filter by Genre <span class="caret"></span>
               </a>
               <ul class="dropdown-menu">
                 {% for genre in genres %}
                   <li class="stop-propagation"><a>
-                    <input type="checkbox" id="genre-{{genre}}">
-                    <label for="genre-{{genre}}"> {{genre}}</label>
+                    <label>
+                    {% if loop.index0 in filter_list %}
+                      <input type="checkbox" id="genre-{{loop.index0}}" checked>
+                    {% else %}
+                      <input type="checkbox" id="genre-{{loop.index0}}">
+                    {% endif %}
+                    {{genre}}</label>
                   </a></li>
                 {% endfor %}
               </ul>
@@ -89,6 +94,7 @@
 	  <script type="text/javascript">
       $(function() {
         render_all_stars();
+
         $('div.infinite-scroll').jscroll({
           padding: 400,
           callback: render_all_stars
@@ -97,6 +103,19 @@
         $('.stop-propagation').click(function(e) {
           e.stopPropagation();
         });
+
+        $('#genre-dropdown').on('hide.bs.dropdown', function () {
+          var data = "";
+          $('input[type=checkbox]').each(function () {
+            if (this.checked) {
+              data += "," + this.id.substring(6);
+            }
+          });
+          if (data.length > 0) {
+            data = data.substring(1);
+          }
+          window.location.href = "{{url_for('root')}}?filter=" + data;
+        })
       });
 
       function render_all_stars() {
