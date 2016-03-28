@@ -28,17 +28,43 @@
   </head>
 
   <body>
-    <!-- Main jumbotron for a primary marketing message or call to action -->
-    <div class="jumbotron">
-      <div class="container">
-        <h1>Cambridgeshire Library eBooks</h1>
-        <p>
-          Scraped from <a href="http://cambridgeshire.libraryebooks.co.uk/site/EB/ebooks/" target="_blank">Cambridgeshire Library eBooks</a>
-          with ratings from <a href="http://www.goodreads.com/" target="_blank">GoodReads</a>.
-        </p>
-        <!-- <p><a class="btn btn-primary btn-lg" href="#" role="button">Learn more &raquo;</a></p> -->
-      </div>
-    </div>
+
+    <nav class="navbar navbar-default">
+      <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">Cambridgeshire Library eBooks</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+          <!-- <ul class="nav navbar-nav">
+          </ul> -->
+          <ul class="nav navbar-nav navbar-right">
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                Filter by Genre <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu">
+                {% for genre in genres %}
+                  <li class="stop-propagation"><a>
+                    <input type="checkbox" id="genre-{{genre}}">
+                    <label for="genre-{{genre}}"> {{genre}}</label>
+                  </a></li>
+                {% endfor %}
+              </ul>
+            </li>
+            <li><a href="#">About</a></li>
+          </ul>
+        </div><!-- /.navbar-collapse -->
+      </div><!-- /.container-fluid -->
+    </nav>
 
     <div class="container infinite-scroll">
       {% include "books_fragment.html" %}
@@ -49,7 +75,6 @@
         <p></p>
       </footer>
     </div> <!-- /container -->
-
 
     <!-- Bootstrap core JavaScript
     ================================================== -->
@@ -67,6 +92,10 @@
         $('div.infinite-scroll').jscroll({
           padding: 400,
           callback: render_all_stars
+        });
+
+        $('.stop-propagation').click(function(e) {
+          e.stopPropagation();
         });
       });
 

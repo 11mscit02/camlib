@@ -5,6 +5,10 @@ from flask import Flask, render_template, request
 
 DEFAULT_JSON_PATH = "_json"
 PAGE_LENGTH = 20
+GENRE_LIST = ["Biography & True Stories",
+              "Fiction & related items",
+              "Mathematics & science",
+              ]
 
 class CamlibFlask(Flask):
     def __init__(self, *args, **kwds):
@@ -19,7 +23,10 @@ app = CamlibFlask(__name__)
 
 @app.route("/")
 def root():
-    return render_template("root.html", data=app.books[:PAGE_LENGTH], next_page=2)
+    return render_template("root.html",
+                           data=app.books[:PAGE_LENGTH],
+                           genres=GENRE_LIST,
+                           next_page=2)
 
 @app.route("/fragment/books")
 def books_fragment():
