@@ -13,7 +13,8 @@ class CamlibFlask(Flask):
         self.genres = []
 
     def load_books(self, json_path):
-        self.books = json.load(open(os.path.join(json_path, "camlib.json")))
+        data = json.load(open(os.path.join(json_path, "camlib.json")))
+        self.books = data["books"]
         self.books.sort(key=lambda book: book["rating"], reverse=True)
         self.genres = list({book["genre"] for book in self.books})
 

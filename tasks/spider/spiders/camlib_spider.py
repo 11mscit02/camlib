@@ -1,7 +1,5 @@
 import sys
 import scrapy
-from scrapy.shell import inspect_response
-from scrapy.loader import ItemLoader
 from spider.items import Book
 
 # Javascript action from the 'AVAILABILITY' filter button
@@ -10,28 +8,17 @@ AVAILABILITY_URL = "javascript:subform('addfacet#AvailableLicence:(%2238%22)#Ava
 class CamlibSpider(scrapy.Spider):
     name = "camlib"
     allowed_domains = ["cambridgeshire.libraryebooks.co.uk"]
-    start_urls = ['http://cambridgeshire.libraryebooks.co.uk/site/EB/ebooks/genre.asp']
 
     def __init__(self, genre, *args, **kwds):
         self.genre = genre
         super(CamlibSpider, self).__init__(*args, **kwds)
 
-    def parse(self, response):
-        print "\nCrawling Genre '%s'" % self.genre,
-        sys.stdout.flush()
-        return self.crawl_genre(response)
-
-    def crawl_genre(self, response):
-        """From the genre selection page, crawl the selected genre"""
-        for genre_obj in response.xpath("//h2[@class='genreList']/a"):
-            genre = genre_obj.xpath("text()").extract_first()
-            if genre == self.genre:
-                url = genre_obj.xpath("@href").extract_first()
-                yield scrapy.Request(response.urljoin(url),
+    def start_requests(self):
+        print "\nCrawling Genre '%s'" % self.genre["name"],
+        return [scrapy.Request(self.genre["url"],
                                      self.parse_genre_crawl_next_page,
-                                     meta={"genre": genre},
                                      # All requests redirect to the same URL, so don't filter duplicates
-                                     dont_filter=True)
+                                     dont_filter=True)]
 
     def parse_genre_crawl_next_page(self, response):
         """Scrape all of the books in the results, then crawl to the next page"""
@@ -43,7 +30,7 @@ class CamlibSpider(scrapy.Spider):
             author = book.xpath(".//li[@class='author']/text()").extract_first()
             cover_url = book.xpath(".//li[@class='b_cover']/div/a/img/@src").extract_first()
             in_stock = book.xpath(".//p[@class='inStock']")
-            genre = response.meta["genre"]
+            genre = self.genre["name"]
             if in_stock:
                 yield Book(title=title,
                            isbn=isbn,

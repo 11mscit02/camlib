@@ -18,20 +18,20 @@ from scrapy.utils.project import get_project_settings
 from scrapy.utils.log import configure_logging
 
 from spider.spiders.camlib_spider import CamlibSpider
+from spider.spiders.genre_spider import GenreSpider
 from rating import goodreads
-
-GENRE_LIST = ["Biography & True Stories",
-              "Fiction & related items",
-              "Mathematics & science",
-              ]
 
 THIS_DIR = os.path.dirname(os.path.abspath(__file__))
 DEFAULT_OUTPUT = os.path.join(THIS_DIR, "..", "_json", "camlib.json")
 
 def run_spider():
     books = []
-    def add_item(item):
+    genres = []
+
+    def add_book(item):
         books.append(dict(item))
+    def add_genre(item):
+        genres.append(dict(item))
 
 #    configure_logging()
     settings = get_project_settings()
@@ -39,17 +39,23 @@ def run_spider():
 
     @defer.inlineCallbacks
     def crawl():
-        for genre in GENRE_LIST:
+        # Scrape the list of genres
+        crawler = Crawler(GenreSpider, settings)
+        crawler.signals.connect(add_genre, signals.item_passed)
+        yield runner.crawl(crawler)
+
+        # Scrape all books for each genre
+        for genre in genres[:1]:
             crawler = Crawler(CamlibSpider, settings)
-            crawler.signals.connect(add_item, signals.item_passed)
+            crawler.signals.connect(add_book, signals.item_passed)
             yield runner.crawl(crawler, genre=genre)
         reactor.stop()
         print
 
     crawl()
     reactor.run()
-    print "Collected %d books" % len(books)
-    return books
+    print "Collected %d books from %d genres" % (len(books), len(genres))
+    return genres, books
 
 def run_ratings(books, chunk_size=20):
     print "Gathering ratings",
@@ -63,9 +69,10 @@ def scrape(output=None):
     if output is None:
         output = DEFAULT_OUTPUT
 
-    books = run_spider()
+    genres, books = run_spider()
     books = run_ratings(books)
-    json.dump(books, open(output, "w"), separators=(",", ":"))
+    data = {"genres": genres, "books": books}
+    json.dump(data, open(output, "w"), separators=(",", ":"))
 
 if __name__ == "__main__":
     import argparse

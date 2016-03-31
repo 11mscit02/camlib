@@ -14,3 +14,8 @@ class Book(scrapy.Item):
     isbn = scrapy.Field()
     genre = scrapy.Field()
     rating = scrapy.Field()
+
+class Genre(scrapy.Item):
+    name = scrapy.Field()
+    url = scrapy.Field()
+    book_count = scrapy.Field()
