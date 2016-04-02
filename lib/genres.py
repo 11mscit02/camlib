@@ -20,7 +20,7 @@ GENRE_TREE = [
                 "Picture books, activity books & early learning material",
                 ]},
 
-    {"section": "Biography & True Stories",
+    {"section": "Computing & information technology",
      "genres": ["Business applications",
                 "Computer hardware",
                 "Computer networking & communications",
@@ -31,26 +31,26 @@ GENRE_TREE = [
                 "Operating systems",
                 ]},
 
-    {"section": "Biography & True Stories",
+    {"section": "Earth sciences, geography, environment, planning",
      "genres": ["Earth sciences",
                 "Geography",
                 "The environment",
                 "Business & management",
                 ]},
 
-    {"section": "Biography & True Stories",
+    {"section": "Economics, finance, business & management",
      "genres": ["Economics",
                 "Economics, finance, business & management",
                 "Finance & accounting",
                 "Industry & industrial studies",
                 ]},
 
-    {"section": "Biography & True Stories",
+    {"section": "English language teaching (ELT)",
      "genres": ["ELT: learning material & coursework",
                 "English language teaching (ELT)",
                 ]},
 
-    {"section": "Biography & True Stories",
+    {"section": "Fiction & related items",
      "genres": ["Adventure",
                 "Classic fiction (pre c 1945)",
                 "Crime & mystery",
@@ -71,32 +71,32 @@ GENRE_TREE = [
                 "Thriller / suspense",
                 ]},
 
-    {"section": "Biography & True Stories",
+    {"section": "Health & personal development",
      "genres": ["Family & health",
                 "Health & personal development",
                 "Mind, Body, Spirit",
                 "Self-help & personal development",
                 ]},
 
-    {"section": "Biography & True Stories",
+    {"section": "Humanities",
      "genres": ["History",
                 "Humanities",
                 "Philosophy",
                 "Religion & beliefs",
                 ]},
 
-    {"section": "Biography & True Stories",
+    {"section": "Language",
      "genres": ["Language teaching & learning (other than ELT)",
                 "Language: reference & general",
                 "linguistics",
                 ]},
 
-    {"section": "Biography & True Stories",
+    {"section": "Law",
      "genres": ["Jurisprudence & general issues",
                 "Laws of Specific jurisdictions",
                 ]},
 
-    {"section": "Biography & True Stories",
+    {"section": "Lifestyle, sport & leisure",
      "genres": ["Antiques & collectables",
                 "Cookery / food & drink etc",
                 "Gardening",
@@ -112,7 +112,7 @@ GENRE_TREE = [
                 "Travel & holiday",
                 ]},
 
-    {"section": "Biography & True Stories",
+    {"section": "Literature & literary studies",
      "genres": ["Anthologies (non-poetry)",
                 "Literature & literary studies",
                 "Literature: history & criticism",
@@ -121,25 +121,25 @@ GENRE_TREE = [
                 "Prose: non-fiction",
                 ]},
 
-    {"section": "Biography & True Stories",
+    {"section": "Mathematics & science",
      "genres": ["Astronomy, space & time",
                 "Mathematics",
                 "Physics",
                 "Science: general issues",
                 ]},
 
-    {"section": "Biography & True Stories",
+    {"section": "Medicine",
      "genres": ["Clinical & internal medicine",
                 "Medicine: general issues",
                 "Nursing & ancillary services",
                 "Other branches of medicine",
                 ]},
 
-    {"section": "Biography & True Stories",
+    {"section": "Reference, information & interdisciplinary subjects",
      "genres": ["Encyclopaedias & reference works",
                 ]},
 
-    {"section": "Biography & True Stories",
+    {"section": "Society & social sciences",
      "genres": ["Education",
                 "Politics & government",
                 "Psychology",
@@ -149,7 +149,7 @@ GENRE_TREE = [
                 "Warfare & defence",
                 ]},
 
-    {"section": "Biography & True Stories",
+    {"section": "Technology, engineering, agriculture",
      "genres": ["Agriculture & farming",
                 "Civil engineering, surveying & building",
                 "Electronics & communications engineering",
@@ -158,7 +158,7 @@ GENRE_TREE = [
                 "Technology: general issues",
                 ]},
 
-    {"section": "Biography & True Stories",
+    {"section": "The arts",
      "genres": ["Architecture",
                 "Art forms",
                 "Film, TV & radio",
@@ -168,14 +168,14 @@ GENRE_TREE = [
                 "Theatre studies",
                 ]},
 
-    {"section": "Biography & True Stories",
+    {"section": "Unclassified",
      "genres": ["Unclassified",
                 ]},
 ]
 
 FULL_GENRE_LIST = [genre for section in GENRE_TREE for genre in section["genres"]]
 
-def get_genre_tree(genres, books):
+def get_genre_tree(books):
     tree = []
     for section in GENRE_TREE:
         branch = {"section": section["section"],

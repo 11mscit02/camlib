@@ -17,7 +17,7 @@ class CamlibFlask(Flask):
         data = json.load(open(os.path.join(json_path, "camlib.json")))
         self.books = data["books"]
         self.books.sort(key=lambda book: book["rating"], reverse=True)
-        self.genre_tree = get_genre_tree(data["genres"], data["books"])
+        self.genre_tree = get_genre_tree(data["books"])
 
     def filter_books(self, filter_list):
         genre_list = [FULL_GENRE_LIST[i] for i in filter_list]
