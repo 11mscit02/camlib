@@ -10,14 +10,16 @@ PAGE_LENGTH = 20
 class CamlibFlask(Flask):
     def __init__(self, *args, **kwds):
         super(CamlibFlask, self).__init__(*args, **kwds)
+        self.reset()
+
+    def reset(self):
         self.books = []
         self.genres = []
 
-    def load_books(self, json_path):
-        data = json.load(open(os.path.join(json_path, "camlib.json")))
-        self.books = data["books"]
+    def load_data(self, json_data):
+        self.books = json_data["books"]
         self.books.sort(key=lambda book: book["rating"], reverse=True)
-        self.genre_tree = get_genre_tree(data["books"])
+        self.genre_tree = get_genre_tree(self.books)
 
     def filter_books(self, filter_list):
         genre_list = [FULL_GENRE_LIST[i] for i in filter_list]
@@ -70,7 +72,9 @@ def _parse_filter_list(request):
 def setup(json_path=None):
     if json_path is None:
         json_path = DEFAULT_JSON_PATH
-    app.load_books(json_path)
+
+    json_data = json.load(open(os.path.join(json_path, "camlib.json")))
+    app.load_data(json_data)
     print "Loaded %d books" % len(app.books)
 
 if __name__ == "__main__":
