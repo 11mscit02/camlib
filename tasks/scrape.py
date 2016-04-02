@@ -45,7 +45,7 @@ def run_spider():
         yield runner.crawl(crawler)
 
         # Scrape all books for each genre
-        for genre in genres[:1]:
+        for genre in genres:
             crawler = Crawler(CamlibSpider, settings)
             crawler.signals.connect(add_book, signals.item_passed)
             yield runner.crawl(crawler, genre=genre)
