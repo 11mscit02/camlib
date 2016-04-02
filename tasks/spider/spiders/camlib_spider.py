@@ -15,6 +15,7 @@ class CamlibSpider(scrapy.Spider):
 
     def start_requests(self):
         print "\nCrawling Genre '%s'" % self.genre["name"],
+        sys.stdout.flush()
         return [scrapy.Request(self.genre["url"],
                                      self.parse_genre_crawl_next_page,
                                      # All requests redirect to the same URL, so don't filter duplicates
@@ -22,6 +23,11 @@ class CamlibSpider(scrapy.Spider):
 
     def parse_genre_crawl_next_page(self, response):
         """Scrape all of the books in the results, then crawl to the next page"""
+        # TODO: Handle single-item result page
+        if "catpage3.asp" in response.url:
+            print "\bX",
+            sys.stdout.flush()
+            return
         print "\b.",
         sys.stdout.flush()
         for book in response.xpath("//ul[@class='cat_details']"):
