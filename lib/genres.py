@@ -173,5 +173,20 @@ GENRE_TREE = [
                 ]},
 ]
 
-# Flat ordered list of all genres
-GENRE_LIST = [genre for section in GENRE_TREE for genre in section["genres"]]
+FULL_GENRE_LIST = [genre for section in GENRE_TREE for genre in section["genres"]]
+
+def get_genre_tree(genres, books):
+    tree = []
+    for section in GENRE_TREE:
+        branch = {"section": section["section"],
+                  "genres": []}
+        for genre_name in section["genres"]:
+            books_in_genre = [book for book in books if book["genre"] == genre_name]
+            if books_in_genre:
+                genre = {"name": genre_name,
+                         "index": FULL_GENRE_LIST.index(genre_name),
+                         "book_count": len(books_in_genre)}
+                branch["genres"].append(genre)
+        if branch["genres"]:
+            tree.append(branch)
+    return tree

@@ -2,6 +2,7 @@
 import os
 import json
 from flask import Flask, render_template, request
+from lib.genres import get_genre_tree, FULL_GENRE_LIST
 
 DEFAULT_JSON_PATH = "_json"
 PAGE_LENGTH = 20
@@ -16,10 +17,10 @@ class CamlibFlask(Flask):
         data = json.load(open(os.path.join(json_path, "camlib.json")))
         self.books = data["books"]
         self.books.sort(key=lambda book: book["rating"], reverse=True)
-        self.genres = list({book["genre"] for book in self.books})
+        self.genre_tree = get_genre_tree(data["genres"], data["books"])
 
     def filter_books(self, filter_list):
-        genre_list = [self.genres[i] for i in filter_list]
+        genre_list = [FULL_GENRE_LIST[i] for i in filter_list]
         return [book for book in self.books if book["genre"] in genre_list]
 
 app = CamlibFlask(__name__)
@@ -31,7 +32,7 @@ def root():
     data = filtered_books[:PAGE_LENGTH]
     return render_template("root.html",
                            data=data,
-                           genres=app.genres,
+                           genre_tree=app.genre_tree,
                            filter=request.args.get("filter", None),
                            filter_list=filter_list,
                            next_page=2)
@@ -64,7 +65,7 @@ def _parse_filter_list(request):
         data = request.args["filter"]
         return [int(i) for i in data.split(",") if i != ""]
     else:
-        return range(len(app.genres))
+        return range(len(FULL_GENRE_LIST))
 
 def setup(json_path=None):
     if json_path is None:

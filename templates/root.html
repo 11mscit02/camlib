@@ -51,16 +51,19 @@
                 Filter by Genre <span class="caret"></span>
               </a>
               <ul class="dropdown-menu">
-                {% for genre in genres %}
-                  <li class="stop-propagation"><a>
-                    <label>
-                    {% if loop.index0 in filter_list %}
-                      <input type="checkbox" id="genre-{{loop.index0}}" checked>
-                    {% else %}
-                      <input type="checkbox" id="genre-{{loop.index0}}">
-                    {% endif %}
-                    {{genre}}</label>
-                  </a></li>
+                {% for section in genre_tree %}
+                  <li>{{section["section"]}}</li>
+                  {% for genre in section["genres"] %}
+                    <li class="stop-propagation"><a>
+                      <label>
+                      {% if genre["index"] in filter_list %}
+                        <input type="checkbox" id="genre-{{genre["index"]}}" checked>
+                      {% else %}
+                        <input type="checkbox" id="genre-{{genre["index"]}}">
+                      {% endif %}
+                      {{genre["name"]}} ({{genre["book_count"]}})</label>
+                    </a></li>
+                  {% endfor %}
                 {% endfor %}
               </ul>
             </li>
