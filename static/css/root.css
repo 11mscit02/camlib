@@ -2,6 +2,18 @@ a.navbar-brand {
   font-size: 24px;
 }
 
+.dropdown-menu a.section {
+  font-weight: bold;
+}
+
+.dropdown-menu label.genre {
+  font-weight: normal;
+}
+
+.dropdown-menu .divider {
+  margin-top: 5px;
+}
+
 span.stars, span.stars span {
     background: url(/static/images/stars.png) 0 -16px repeat-x;
     width: 80px;

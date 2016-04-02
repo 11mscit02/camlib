@@ -52,10 +52,10 @@
               </a>
               <ul class="dropdown-menu">
                 {% for section in genre_tree %}
-                  <li>{{section["section"]}}</li>
+                  <li><a class="section">{{section["section"]}}</a></li>
                   {% for genre in section["genres"] %}
                     <li class="stop-propagation"><a>
-                      <label>
+                      <label class="genre">
                       {% if genre["index"] in filter_list %}
                         <input type="checkbox" id="genre-{{genre["index"]}}" checked>
                       {% else %}
@@ -64,6 +64,10 @@
                       {{genre["name"]}} ({{genre["book_count"]}})</label>
                     </a></li>
                   {% endfor %}
+
+                  {% if not loop.last %}
+                    <li role="separator" class="divider"></li>
+                  {% endif %}
                 {% endfor %}
               </ul>
             </li>
