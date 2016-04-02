@@ -171,6 +171,10 @@ GENRE_TREE = [
     {"section": "Unclassified",
      "genres": ["Unclassified",
                 ]},
+
+    {"section": "Unrecognised",
+     "genres": ["Unrecognised",
+                ]},
 ]
 
 FULL_GENRE_LIST = [genre for section in GENRE_TREE for genre in section["genres"]]
@@ -189,4 +193,17 @@ def get_genre_tree(books):
                 branch["genres"].append(genre)
         if branch["genres"]:
             tree.append(branch)
+
+    # Put any unrecognised books into "Unrecognised"
+    unrecognised_books = [book for book in books if book["genre"] not in FULL_GENRE_LIST]
+    if unrecognised_books:
+        tree.append({"section": "Unrecognised",
+                     "genres": [{"name": "Unrecognised",
+                                 "index": FULL_GENRE_LIST.index("Unrecognised"),
+                                 "book_count": len(unrecognised_books)}]})
+
+        print "WARNING: found the following unrecognised genres:"
+        for genre in set([book["genre"] for book in unrecognised_books]):
+            print "   %s" % genre
+
     return tree
