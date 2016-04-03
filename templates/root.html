@@ -51,9 +51,9 @@
                 Filter by Genre <span class="caret"></span>
               </a>
               <ul class="dropdown-menu">
-                {% for section in genre_tree %}
-                  <li><a class="section">{{section["section"]}}</a></li>
-                  {% for genre in section["genres"] %}
+                {% for section in section_list %}
+                  <li><a class="section">{{section}}</a></li>
+                  {% for genre in genre_map[section] %}
                     <li class="stop-propagation"><a>
                       <label class="genre">
                       {% if genre["index"] in filter_list %}

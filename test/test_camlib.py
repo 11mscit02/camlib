@@ -36,18 +36,18 @@ class TestCamlib(unittest.TestCase):
     def test_genre_tree_is_generated(self):
         app.load_data({"books": TEST_BOOKS})
 
-        expected = [{'section': 'Biography & True Stories',
-                     'genres': [{'index': 4,
-                                 'name': 'True stories',
-                                 'book_count': 1}]},
-                    {'section': 'Humanities',
-                     'genres': [{'index': 52,
-                                 'name': 'History',
-                                 'book_count': 2},
-                                 {'index': 54,
-                                  'name': 'Philosophy',
-                                  'book_count': 1}]}]
-        assert_that(app.genre_tree, is_(expected))
+        assert_that(app.genres.section_list, is_(["Biography & True Stories",
+                                                  "Humanities"]))
+        assert_that(app.genres.genre_map, is_(
+            {'Biography & True Stories': [{'index': 4,
+                                           'name': 'True stories',
+                                           'book_count': 1}],
+             'Humanities':               [{'index': 52,
+                                           'name': 'History',
+                                           'book_count': 2},
+                                          {'index': 54,
+                                           'name': 'Philosophy',
+                                           'book_count': 1}]}))
 
     def test_books_can_be_filtered_by_genre(self):
         app.load_data({"books": TEST_BOOKS})

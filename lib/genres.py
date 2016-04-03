@@ -177,33 +177,34 @@ GENRE_TREE = [
                 ]},
 ]
 
-FULL_GENRE_LIST = [genre for section in GENRE_TREE for genre in section["genres"]]
+class Genres():
+    FULL_GENRE_LIST = [genre for section in GENRE_TREE for genre in section["genres"]]
 
-def get_genre_tree(books):
-    tree = []
-    for section in GENRE_TREE:
-        branch = {"section": section["section"],
-                  "genres": []}
-        for genre_name in section["genres"]:
-            books_in_genre = [book for book in books if book["genre"] == genre_name]
-            if books_in_genre:
-                genre = {"name": genre_name,
-                         "index": FULL_GENRE_LIST.index(genre_name),
-                         "book_count": len(books_in_genre)}
-                branch["genres"].append(genre)
-        if branch["genres"]:
-            tree.append(branch)
+    def __init__(self, books):
+        self.section_list = []
+        self.genre_map = {}
 
-    # Put any unrecognised books into "Unrecognised"
-    unrecognised_books = [book for book in books if book["genre"] not in FULL_GENRE_LIST]
-    if unrecognised_books:
-        tree.append({"section": "Unrecognised",
-                     "genres": [{"name": "Unrecognised",
-                                 "index": FULL_GENRE_LIST.index("Unrecognised"),
-                                 "book_count": len(unrecognised_books)}]})
+        for section in GENRE_TREE:
+            genres = []
+            for genre_name in section["genres"]:
+                books_in_genre = [book for book in books if book["genre"] == genre_name]
+                if books_in_genre:
+                    genre = {"name": genre_name,
+                             "index": self.FULL_GENRE_LIST.index(genre_name),
+                             "book_count": len(books_in_genre)}
+                    genres.append(genre)
+            if genres:
+                self.section_list.append(section["section"])
+                self.genre_map[section["section"]] = genres
 
-        print "WARNING: found the following unrecognised genres:"
-        for genre in set([book["genre"] for book in unrecognised_books]):
-            print "   %s" % genre
+        # Put any unrecognised books into "Unrecognised"
+        unrecognised_books = [book for book in books if book["genre"] not in self.FULL_GENRE_LIST]
+        if unrecognised_books:
+            self.section_list.append("Unrecognised")
+            self.genre_map["Unrecognised"] = [{"name": "Unrecognised",
+                                               "index": self.FULL_GENRE_LIST.index("Unrecognised"),
+                                               "book_count": len(unrecognised_books)}]
 
-    return tree
+            print "WARNING: found the following unrecognised genres:"
+            for genre in set([book["genre"] for book in unrecognised_books]):
+                print "   %s" % genre
